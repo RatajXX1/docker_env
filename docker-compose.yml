@@ -1,6 +1,7 @@
 version: "3"
 services:
   server:
+    platform: linux/x86_64
     build:
       context: .
       dockerfile: ./server/Dockerfile
@@ -13,8 +14,39 @@ services:
       - "80:80"
     volumes:
       - ./src:/var/www/html
+  database:
+    container_name: database
+    hostname: database
+    image: mysql:8.0
+    networks:
+      - internal
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - database:/var/lib/myqsl
+  elasticsearch:
+    container_name: server-elasticsearch
+    hostname: server-elasticsearch
+    image: elasticsearch:7.17.14
+    expose:
+      - "9200"
+      - "9300"
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - VIRTUAL_HOST=server-elasticsearch
+      - HTTP_EXPOSE=9200:9200
+      - HTTPS_EXPOSE=9201:9200
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch
+    networks:
+      - internal
 networks:
   internal:
     driver: bridge
 volumes:
   database:
+  elasticsearch:
