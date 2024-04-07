@@ -1,40 +1,18 @@
-version: '3'
+version: "3"
 services:
-  php:
-    build: 
+  server:
+    build:
       context: .
-      dockerfile: php.Dockerfile
+      dockerfile: ./server/Dockerfile
       args:
         - MAGENTO_PUBLIC_KEY=81dad6b4db7c895e80fed91e1a9a6e7e
         - MAGENTO_PRIVATE_KEY=e8522bd8e21ec761530f937c9f5a15ed
     networks:
       - internal
-    volumes:
-      - ./src:/var/www/html
-  server:
-    build: 
-      context: .
-      dockerfile: nginx.Dockerfile
     ports:
-      - "8080:80"
-    networks:
-      - internal
+      - "80:80"
     volumes:
       - ./src:/var/www/html
-  db:
-    image: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-    networks:
-      - internal
-    volumes:
-      - database:/var/lib/mysql
-  search:
-    image: elasticsearch:7.17.19
-    environment:
-      - discovery.type=single-node
-    networks:
-      - internal
 networks:
   internal:
     driver: bridge

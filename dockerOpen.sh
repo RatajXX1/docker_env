@@ -2,9 +2,9 @@
 
 # name="${1?needs one argument}"
 
-name="mag_dok-php"
+name="docker_env-server"
 
-containerId=$(docker ps | awk -v app="mag_dok-php" '$2 ~ app{print $1}')
+containerId=$(docker ps | awk -v app="docker_env-server" '$2 ~ app{print $1}')
 if [[ -n "$containerId" ]]; then
     docker exec -it $containerId bash
 else
