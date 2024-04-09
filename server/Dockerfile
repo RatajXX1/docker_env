@@ -3,6 +3,8 @@ FROM debian:bookworm
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get -qq update
+RUN dpkg --configure -a
+RUN apt install -f
 RUN apt-get -qq install --no-install-recommends --no-install-suggests -y \
     apt-transport-https \
     ca-certificates \

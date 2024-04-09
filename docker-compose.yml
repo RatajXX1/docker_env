@@ -12,6 +12,10 @@ services:
       - internal
     ports:
       - "80:80"
+      - "3000:3000"
+      - "30001:3001"
+    extra_hosts:
+      host.docker.internal: host-gateway
     volumes:
       - ./src:/var/www/html
   database:
